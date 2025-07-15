@@ -20,6 +20,7 @@ function ShoppingAccount() {
               <TabsTrigger value="address">Address</TabsTrigger>
             </TabsList>
             <TabsContent value="orders">
+              {/* <Orders /> */}
               <ShoppingOrders />
             </TabsContent>
             <TabsContent value="address">

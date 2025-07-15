@@ -285,6 +285,7 @@ const brandsWithIcon = [
 ];
 
 function ShoppingHome() {
+  const slide = [bannerOne, bannerTwo, bannerThree];
   const [currentSlide, setCurrentSlide] = useState(0);
   const { productList, productDetails } = useSelector(
     (state) => state.shopProducts
