@@ -142,6 +142,7 @@
 // }
 
 // export default AdminOrderDetailsView;
+
 import { useState } from "react";
 import CommonForm from "../common/form";
 import { DialogContent } from "../ui/dialog";
@@ -185,51 +186,54 @@ function AdminOrderDetailsView({ orderDetails }) {
   }
 
   return (
-    <DialogContent className="sm:max-w-[650px] max-h-[80vh] overflow-y-auto p-6 bg-white/80 backdrop-blur-lg rounded-2xl shadow-2xl">
+    <DialogContent className="sm:max-w-[700px] max-h-[80vh] overflow-y-auto p-8 bg-white rounded-3xl shadow-2xl border border-gray-200">
       <div className="grid gap-6">
+        {/* Header */}
+        <div className="text-center">
+          <h2 className="text-3xl font-extrabold text-gray-800">
+            🛠️ Manage Order
+          </h2>
+          <p className="text-sm text-gray-500 mt-1">
+            View and update the status of this order
+          </p>
+        </div>
+
+        <Separator className="my-4" />
+
         {/* Order Meta */}
         <div className="grid gap-4">
-          <div className="flex justify-between items-center">
-            <p className="text-lg font-semibold text-gray-700">Order ID</p>
-            <Label className="text-gray-900">{orderDetails?._id}</Label>
-          </div>
-          <div className="flex justify-between items-center">
-            <p className="text-lg font-semibold text-gray-700">Order Date</p>
-            <Label className="text-gray-900">
-              {orderDetails?.orderDate?.split("T")[0]}
-            </Label>
-          </div>
-          <div className="flex justify-between items-center">
-            <p className="text-lg font-semibold text-gray-700">Order Price</p>
-            <Label className="text-gray-900">
-              💵 ${orderDetails?.totalAmount}
-            </Label>
-          </div>
-          <div className="flex justify-between items-center">
-            <p className="text-lg font-semibold text-gray-700">
-              Payment Method
-            </p>
-            <Label className="text-gray-900">
-              {orderDetails?.paymentMethod}
-            </Label>
-          </div>
-          <div className="flex justify-between items-center">
-            <p className="text-lg font-semibold text-gray-700">
-              Payment Status
-            </p>
-            <Label className="text-gray-900">
-              {orderDetails?.paymentStatus}
-            </Label>
-          </div>
-          <div className="flex justify-between items-center">
-            <p className="text-lg font-semibold text-gray-700">Order Status</p>
+          {[
+            { label: "Order ID", value: orderDetails?._id },
+            {
+              label: "Order Date",
+              value: orderDetails?.orderDate?.split("T")[0],
+            },
+            {
+              label: "Order Price",
+              value: `💵 $${orderDetails?.totalAmount}`,
+            },
+            { label: "Payment Method", value: orderDetails?.paymentMethod },
+            { label: "Payment Status", value: orderDetails?.paymentStatus },
+          ].map((item, idx) => (
+            <div
+              key={idx}
+              className="flex justify-between items-center px-4 py-3 bg-gray-50 rounded-xl border border-gray-100 hover:shadow-md transition"
+            >
+              <p className="font-medium text-gray-700">{item.label}</p>
+              <Label className="text-gray-900">{item.value}</Label>
+            </div>
+          ))}
+
+          {/* Order Status with Badge */}
+          <div className="flex justify-between items-center px-4 py-3 bg-gray-50 rounded-xl border border-gray-100 hover:shadow-md transition">
+            <p className="font-medium text-gray-700">Order Status</p>
             <Badge
-              className={`py-1 px-4 rounded-full shadow ${
+              className={`py-1 px-4 rounded-full shadow text-white ${
                 orderDetails?.orderStatus === "confirmed"
-                  ? "bg-green-500/90 text-white"
+                  ? "bg-green-500"
                   : orderDetails?.orderStatus === "rejected"
-                  ? "bg-red-500/90 text-white"
-                  : "bg-gray-500/90 text-white"
+                  ? "bg-red-500"
+                  : "bg-gray-400"
               }`}
             >
               {orderDetails?.orderStatus}
@@ -241,19 +245,21 @@ function AdminOrderDetailsView({ orderDetails }) {
 
         {/* Cart Items */}
         <div className="grid gap-4">
-          <p className="text-lg font-semibold text-gray-800">🛒 Order Items</p>
+          <h3 className="text-xl font-semibold text-gray-800">
+            🛒 Order Items
+          </h3>
           <ul className="grid gap-3">
             {orderDetails?.cartItems && orderDetails?.cartItems.length > 0 ? (
               orderDetails.cartItems.map((item, index) => (
                 <li
                   key={index}
-                  className="flex flex-col sm:flex-row sm:items-center sm:justify-between bg-gradient-to-r from-gray-50 to-gray-100 rounded-xl p-4 shadow-inner hover:shadow-lg transition-all duration-300"
+                  className="flex flex-col sm:flex-row sm:items-center sm:justify-between bg-white rounded-xl border border-gray-200 p-4 shadow-sm hover:shadow-md transition-all duration-300"
                 >
-                  <span className="font-medium text-gray-700">
+                  <span className="font-medium text-gray-800">
                     📦 {item.title}
                   </span>
                   <span className="text-gray-600">Qty: {item.quantity}</span>
-                  <span className="font-semibold text-gray-800">
+                  <span className="font-semibold text-gray-900">
                     💵 ${item.price}
                   </span>
                 </li>
@@ -268,9 +274,9 @@ function AdminOrderDetailsView({ orderDetails }) {
 
         {/* Shipping Info */}
         <div className="grid gap-3">
-          <p className="text-lg font-semibold text-gray-800">
+          <h3 className="text-xl font-semibold text-gray-800">
             🚚 Shipping Info
-          </p>
+          </h3>
           <div className="grid gap-1.5 text-gray-600 text-sm">
             <span>👤 {user?.userName}</span>
             <span>🏠 {orderDetails?.addressInfo?.address}</span>
@@ -287,6 +293,9 @@ function AdminOrderDetailsView({ orderDetails }) {
 
         {/* Update Status Form */}
         <div>
+          <h3 className="text-xl font-semibold text-gray-800">
+            ✏️ Update Order Status
+          </h3>
           <CommonForm
             formControls={[
               {
